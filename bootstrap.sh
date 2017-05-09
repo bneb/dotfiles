@@ -11,11 +11,27 @@ function doIt() {
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
+                --exclude "build_extra.sh" \
+                --exclude "change_prompt.sh" \
+                --exclude ".macos" \
+                --exclude "brew.sh" \
+                --exclude "bin" \
+                --exclude "vim" \
 		-avh --no-perms . ~;
+
+        if [[ "$(readlink $HOME/.vim)" == *"vim_dotfiles/vim"* ]]; then
+                cp .vim/colors/s* $HOME/.vim/colors/
+                cp .vimrc $HOME/.vimrc_local
+                mkdir -p $HOME/.vim/backups 2>/dev/null
+        else
+                cp -r .vim $HOME/.vim
+                cp .vimrc $HOME/.vimrc
+        fi;
 
         echo 'source ~/virtualenvs/default/bin/activate' >> ~/.bash_profile
         echo "execute pathogen#infect()" >> ~/.vimrc
 
+        mkdir -p ~/.vim/bundle 2>/dev/null
         cd ~/.vim/bundle
         git clone git://github.com/tpope/vim-sensible.git
         git clone https://github.com/scrooloose/nerdtree.git
@@ -25,6 +41,7 @@ function doIt() {
         git clone https://github.com/bling/vim-airline.git
         git clone https://github.com/valloric/youcompleteme.git
         git clone git://github.com/godlygeek/tabular.git
+        git clone git://github.com/ervandew/supertab
         cd -
 
         echo '" Start NERDTree when no file is passed to vim' >> ~/.vimrc

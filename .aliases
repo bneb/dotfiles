@@ -174,3 +174,8 @@ alias reload="exec $SHELL -l"
 
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+
+# Python functions
+alias factor='python dotfiles/.call_pyfunk.py factor $@'
+alias fibo='python dotfiles/.call_pyfunk.py fibonacci $@'
+alias regress='python dotfiles/.call_pyfunk.py regression $@'

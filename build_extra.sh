@@ -4,7 +4,7 @@
 # The .extra file will hold tmux & possibly other redentials
 
 echo "Hi,"
-echo "    This program will promopt you for some information, and use your responses to build some configurations for you."
+echo "    This script will prompt you for some information to build some configurations for you."
 echo
 echo "Please enter a tmux alias:"
 read tmux_alias
