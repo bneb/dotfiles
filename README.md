@@ -27,7 +27,7 @@ dotfiles/bootstrap.sh
 **Fourth**, run the script to install some useful software (This updates bash and sets it to the default shell)
 
 ``` bash
-dev_setup/brew.sh
+dotfiles/brew.sh
 ```
 
 ###### _If you see some errors in the last step, Homebrew needs some help. Try the following:_
@@ -39,17 +39,17 @@ git reset --hard
 git clean -df
 cd -
 brew update
-dev_setup/brew.sh
+dotfiles/brew.sh
 ```
 
 **Fifth**, review (and make optional modifications) and run the .macos script if installing on a Mac.
 
 ``` bash
-dev_setup/.macos
+dotfiles/.macos
 ```
 
 **Sixth**, run an interactive bash script to build some custom configurations
 
 ``` bash
-dev_setup/build_extra.sh
+dotfiles/build_extra.sh
 ```
