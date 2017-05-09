@@ -62,3 +62,16 @@ def regression(csv_file_path, delim=","):
     X['const'] = 1
     y = df[df.columns[-1]]
     print(ols(y, X).fit(const=True).summary())
+
+
+def permutations(*l):
+    def helper(l , start=[], results=[]):
+        if len(l) < 2:
+            results.append(start + l)
+        else:
+            for _ in range(len(l)):
+                helper(l[1:], start+[l[0]])
+                l = l[1:] + [l[0]]
+        return results
+
+    for el in helper(list(l)): print(el)
