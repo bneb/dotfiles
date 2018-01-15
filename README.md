@@ -1,4 +1,4 @@
-##### My streamlined dotfiles using a different vim configuration and zsh.
+#### My streamlined dotfiles using a different vim configuration and zsh.
 
 ---
 
@@ -24,7 +24,7 @@ dotfiles/bootstrap.sh
 sudo chown -R $(whoami):admin /usr/local
 cd /usr/local && git reset --hard && git clean -df
 cd -
-dotfiles/brew.sh
+dotfiles/bootstrap.sh
 ```
 
 **Third**, review and run the .macos script if installing on a Mac.

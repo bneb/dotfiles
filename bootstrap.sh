@@ -15,13 +15,14 @@ rsync --exclude ".git/" \
   --exclude "LICENSE-MIT.txt" \
   --exclude ".macos" \
   --exclude "requirements.txt" \
+  --exclude "pyfunk.py" \
   -avh --no-perms . ~;
 
 cd -
 
 # build ~/.extra
-echo "\nPlease enter a tmux alias:" && read tmux_alias
-echo "\nPlease enter a default tmux session name" && read tmux_session
+echo "" && echo "Please enter a tmux alias:" && read tmux_alias
+echo "" && echo "Please enter a default tmux session name" && read tmux_session
 
 cat << EOT > ~/.extra
 # This file contains additional configurations

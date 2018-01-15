@@ -11,5 +11,5 @@ charset = utf-8
 [**.py]
 indent_size = 4
 
-[**.js, **.sql]
+[**.js, **.sql, **.rb]
 indent_size = 2
