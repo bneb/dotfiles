@@ -3,8 +3,6 @@
 # This file will prompt the user for input and build the .extra file
 # The .extra file will hold tmux & possibly other redentials
 
-echo "Hi,"
-echo "    This script will prompt you for some information to build some configurations for you."
 echo
 echo "Please enter a tmux alias:"
 read tmux_alias

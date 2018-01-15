@@ -27,7 +27,7 @@ brew install gnu-sed --with-default-names
 # running `chsh`.
 brew install bash
 brew tap homebrew/versions
-brew install bash-completion2
+brew install bash-completion3
 
 # Switch to using brew-installed bash as default shell
 if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then
@@ -82,28 +82,6 @@ brew install tmux
 # Python3
 brew install python3
 
-# Pathogen & vim packages
-mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-echo "execute pathogen#infect()" >> ~/.vimrc
-cd ~/.vim/bundle
-# NerdTree
-git clone https://github.com/scrooloose/nerdtree.git
-# Git for NerdTree
-git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git
-# Linter
-git clone --depth=1 https://github.com/scrooloose/syntastic.git
-# Fuzzy Finder
-git clone https://github.com/kien/ctrlp.vim.git
-# GitGutter
-git clone git://github.com/airblade/vim-gitgutter.git
-# Surround (change quotes or brackets around a word)
-git clone https://github.com/tpope/vim-surround.git
-# Code completion
-git clone https://github.com/valloric/youcompleteme.git
-# Align stuff
-git clone git://github.com/godlygeek/tabular.git
-
 # virtualenv
 pip install virtualenv
 mkdir -p ~/.virtual_environments
@@ -119,7 +97,7 @@ pip install flask
 pip install pyyaml
 pip install seaborn
 pip install statsmodels
-pip install --upgrade tensorflow
+pip install tensorflow
 cd -
 
 # Remove outdated versions from the cellar.

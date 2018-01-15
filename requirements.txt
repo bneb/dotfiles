@@ -1,0 +1,10 @@
+pygments
+numpy
+pandas
+Requests
+django
+flask
+pyyaml
+seaborn
+statsmodels
+tensorflow
