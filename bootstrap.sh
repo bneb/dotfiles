@@ -30,7 +30,7 @@ alias $tmux_alias="tmux a -t $tmux_session || tmux new -s $tmux_session"
 EOT
 
 # brew
-if [ `which brew` != '/usr/local/bin/brew' ]; then
+if [[ `which brew` != '/usr/local/bin/brew' ]]; then
   /usr/bin/ruby -e \
   "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -64,17 +64,20 @@ brew install dark-mode
 brew install git
 # iTerm
 brew install Caskroom/cask/iterm2
+# tmux
+brew install tmux
 # Python3
 brew install python3
 # Remove outdated versions from the cellar.
 brew cleanup
 
 # Python virtual environments
-pip install virtualenv
+pip3 install virtualenv
 mkdir -p ~/.virtual_environments
 cd ~/.virtual_environments
 virtualenv -p python3 default
 source default/bin/activate
-pip install -Ur requirements.txt
+cd -
+pip3 install -Ur ./requirements.txt
 
 source ~/.bash_profile;
