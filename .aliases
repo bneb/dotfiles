@@ -20,7 +20,7 @@ fi
 # List files colorized in long format
 alias l="clear && ls -lF ${colorflag}"
 
-# Clear screen and list all files
+# List all files colorized in long format, excluding . and ..
 alias la="clear && ls -laF ${colorflag}"
 
 # List only directories

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# ~/.macos — https://mths.be/macos
-
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
@@ -26,7 +24,7 @@ sudo nvram SystemAudioVolume=" "
 defaults write com.apple.universalaccess reduceTransparency -bool true
 
 # Set highlight color
-defaults write NSGlobalDomain AppleHighlightColor -string ".68 .82 .80"
+defaults write NSGlobalDomain AppleHighlightColor -string ".44 .89 .89"
 
 # Set sidebar icon size to small (1=small, 2=medium, 3=large)
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
@@ -333,16 +331,12 @@ defaults write com.apple.dock show-process-indicators -bool true
 defaults write com.apple.dock persistent-apps -array
 defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
 defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Google Chrome.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
-defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/iTerm.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
-defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
 defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Sonos.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
 defaults write com.apple.dock persistent-apps -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/Messages.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
 # Add a spacer to the right side of the Dock (where the Trash is)
 defaults write com.apple.dock persistent-others -array
-defaults write com.apple.dock persistent-others -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Users/kevin/Google Drive</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
-defaults write com.apple.dock persistent-others -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Users/kevin/Dropbox</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
-defaults write com.apple.dock persistent-others -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Users/kevin/Screenshots</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
-defaults write com.apple.dock persistent-others -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Users/kevin/Downloads</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+defaults write com.apple.dock persistent-others -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Users/Kevin/Screenshots</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
+defaults write com.apple.dock persistent-others -array-add '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Users/Kevin/Downloads</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>'
 defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
 
 # Don’t animate opening applications from the Dock
@@ -374,6 +368,12 @@ defaults write com.apple.dock autohide -bool true
 
 # Make Dock icons of hidden applications translucent
 defaults write com.apple.dock showhidden -bool true
+
+# Don’t show recent applications in Dock
+defaults write com.apple.dock show-recents -bool false
+
+# Disable the Launchpad gesture (pinch with thumb and three fingers)
+#defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
 
 # Reset Launchpad, but keep the desktop wallpaper intact
 find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
@@ -650,19 +650,6 @@ defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 ###############################################################################
-# Messages                                                                    #
-###############################################################################
-
-# Enable automatic emoji substitution (i.e. use plain text smileys)
-defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool true
-
-# Disable smart quotes as it’s annoying for messages that contain code
-#defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticQuoteSubstitutionEnabled" -bool false
-
-# Disable continuous spell checking
-#defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
-
-###############################################################################
 # Google Chrome                                                               #
 ###############################################################################
 
@@ -674,28 +661,6 @@ defaults write com.google.Chrome AppleEnableMouseSwipeNavigateWithScrolls -bool 
 defaults write com.google.Chrome DisablePrintPreview -bool true
 # Expand the print dialog by default
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
-
-###############################################################################
-# GPGMail 2                                                                   #
-###############################################################################
-
-# Disable signing emails by default
-defaults write ~/Library/Preferences/org.gpgtools.gpgmail SignNewEmailsByDefault -bool false
-
-###############################################################################
-# Opera & Opera Developer                                                     #
-###############################################################################
-
-# Expand the print dialog by default
-defaults write com.operasoftware.Opera PMPrintingExpandedStateForPrint2 -boolean true
-defaults write com.operasoftware.OperaDeveloper PMPrintingExpandedStateForPrint2 -boolean true
-
-###############################################################################
-# Spectacle.app                                                               #
-###############################################################################
-
-# Set up my preferred keyboard shortcuts
-cp -r init/spectacle.json ~/Library/Application\ Support/Spectacle/Shortcuts.json 2> /dev/null
 
 ###############################################################################
 # Kill affected applications                                                  #
