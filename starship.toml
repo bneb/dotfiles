@@ -75,5 +75,5 @@ format = "took [$duration](bold bright-yellow)"
 
 [custom.jj]
 when = "jj-starship detect"
-shell = ["jj-starship"]
+shell = ["jj-starship", "--no-git-prefix", "--no-git-name", "--no-git-id", "--no-git-status"]
 format = "$output "
