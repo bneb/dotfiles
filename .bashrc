@@ -93,6 +93,9 @@ alias gemma-pro="ollama run gemma4:26b"
 # Agentic Coding
 alias aider-local="aider --model ollama/gemma4:26b"
 
+# System Maintenance (The "One Workflow" Updater)
+alias sys-update="echo '🍺 Updating Homebrew...' && brew bundle --file=$HOME/dotfiles/Brewfile && brew upgrade && echo '⚡ Updating Python Tools (Aider)...' && uv tool upgrade --all && echo '🚀 Updating Antigravity...' && agy update"
+
 # Shell Pipelining (e.g., cat error.log | ask "why did this crash?")
 ask() {
     local prompt="$1"
