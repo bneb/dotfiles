@@ -53,7 +53,7 @@ async def main():
     ]
 
     config = LocalAgentConfig(
-        model="gemini-2.5-flash-lite",
+        model="gemini-3.5-flash",
         system_instructions="You are a helpful, extremely capable CLI assistant. You can read files, search the web, and analyze code. If you need to run a command or write a file, you will ask for permission by calling the appropriate tool.",
         capabilities=CapabilitiesConfig(),
         policies=policies,
