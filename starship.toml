@@ -10,35 +10,33 @@
 # Wait 10 milliseconds for starship to check files under the current directory.
 
 format = """
-[╭─](bold bright-black) \
 $directory\
 $git_branch\
 $git_status\
 $git_state\
 $cmd_duration\
 $line_break\
-[╰─](bold bright-black) \
 $character"""
 
 [directory]
-style = "bold cyan"
+style = "bold bright-blue"
 read_only = " 󰌾"
-truncation_length = 3
-truncate_to_repo = true
+truncation_length = 5
+truncate_to_repo = false
 format = "[$path]($style)[$read_only]($read_only_style) "
 
 [character]
 success_symbol = "[❯](bold bright-magenta)"
-error_symbol = "[❯](bold red)"
-vicmd_symbol = "[❮](bold yellow)"
+error_symbol = "[❯](bold bright-red)"
+vicmd_symbol = "[❮](bold bright-yellow)"
 
 [git_branch]
-symbol = " "
-style = "bold purple"
+symbol = "on  "
+style = "bold bright-purple"
 format = "[$symbol$branch]($style) "
 
 [git_status]
-style = "bold red"
+style = "bold bright-red"
 format = '([$all_status$ahead_behind]($style) )'
 
 [nodejs]
