@@ -26,11 +26,7 @@ async def cli_approval_handler(tool_call):
         print("\n\033[1;31m[Error] Could not get user confirmation (no tty). Denying request.\033[0m")
         return False
 
-async def main():
-    # Bypass Antigravity's API key validation since we are using a local Ollama model
-    import os
-    os.environ.setdefault("GEMINI_API_KEY", "local_ollama_bypass")
-    
+async def main():    
     prompt = " ".join(sys.argv[1:])
     
     # Read from stdin if piped
@@ -57,7 +53,7 @@ async def main():
     ]
 
     config = LocalAgentConfig(
-        model="ollama/gemma4:latest",
+        model="gemini-3.5-flash-lite",
         system_instructions="You are a helpful, extremely capable CLI assistant. You can read files, search the web, and analyze code. If you need to run a command or write a file, you will ask for permission by calling the appropriate tool.",
         capabilities=CapabilitiesConfig(),
         policies=policies,
