@@ -1,0 +1,75 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "google-antigravity",
+# ]
+# ///
+
+import asyncio
+import sys
+from google.antigravity import Agent, LocalAgentConfig, CapabilitiesConfig
+from google.antigravity.hooks import policy
+
+async def cli_approval_handler(tool_call):
+    print(f"\n\033[1;33m[Agent wants to execute: {tool_call.name}]\033[0m")
+    for k, v in tool_call.arguments.items():
+        print(f"  \033[36m{k}\033[0m: {v}")
+    
+    # Require a tty to ask for input
+    try:
+        with open('/dev/tty', 'r') as tty:
+            print("\033[1;32mAllow? (y/N):\033[0m ", end="", flush=True)
+            ans = tty.readline().strip().lower()
+            return ans == 'y' or ans == 'yes'
+    except Exception:
+        print("\n\033[1;31m[Error] Could not get user confirmation (no tty). Denying request.\033[0m")
+        return False
+
+async def main():
+    prompt = " ".join(sys.argv[1:])
+    
+    # Read from stdin if piped
+    if not sys.stdin.isatty():
+        stdin_data = sys.stdin.read()
+        if prompt:
+            prompt = f"{prompt}\n\nContext from stdin:\n{stdin_data}"
+        else:
+            prompt = stdin_data
+            
+    if not prompt.strip():
+        print("Usage: ask 'your question here'")
+        print("   or: cat error.log | ask 'why did this crash?'")
+        return
+
+    # Define explicit safety policies
+    policies = [
+        # Explicitly require human approval for mutation tools
+        policy.ask_user("run_command", handler=cli_approval_handler),
+        policy.ask_user("create_file", handler=cli_approval_handler),
+        policy.ask_user("edit_file", handler=cli_approval_handler),
+        # Allow all other tools (read_file, search_web, list_dir, etc.)
+        policy.allow_all(),
+    ]
+
+    config = LocalAgentConfig(
+        model="ollama/gemma4",
+        system_instructions="You are a helpful, extremely capable CLI assistant. You can read files, search the web, and analyze code. If you need to run a command or write a file, you will ask for permission by calling the appropriate tool.",
+        capabilities=CapabilitiesConfig(),
+        policies=policies,
+    )
+
+    try:
+        async with Agent(config) as agent:
+            response = await agent.chat(prompt)
+            async for token in response:
+                print(token, end="", flush=True)
+            print()
+    except Exception as e:
+        print(f"\n\033[1;31m[Error]\033[0m {e}")
+
+if __name__ == "__main__":
+    # Disable uv output noise
+    import os
+    os.environ["UV_QUIET"] = "1"
+    asyncio.run(main())

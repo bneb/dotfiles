@@ -144,16 +144,7 @@ alias aider-local="aider --model ollama/gemma4:26b"
 alias sys-update="echo '🍺 Updating Homebrew...' && brew bundle --file=$HOME/dotfiles/Brewfile && brew upgrade && echo '⚡ Updating Python Tools (Aider)...' && uv tool upgrade --all && echo '🚀 Updating Antigravity...' && agy update"
 
 # Shell Pipelining (e.g., cat error.log | ask "why did this crash?")
-ask() {
-    local prompt="$1"
-    if [ -t 0 ]; then
-        ollama run gemma4 "$prompt"
-    else
-        local input
-        input=$(cat)
-        ollama run gemma4 "$prompt\n\nContext:\n$input"
-    fi
-}
+# Now handled by the agentic `bin/ask` Python script.
 
 # 11. Custom Completions & Integrations
 # Bun completions
