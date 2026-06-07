@@ -7,6 +7,8 @@
 # ==============================================================================
 
 # Core CLI Tools
+tap "dmmulroy/tap"
+brew "jj-starship"     # Native Starship module for Jujutsu
 brew "eza"             # Modern ls
 brew "bat"             # Modern cat
 brew "fzf"             # Fuzzy finder
