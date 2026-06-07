@@ -38,5 +38,4 @@ cask "font-jetbrains-mono-nerd-font"
 cask "raycast"         # Spotlight replacement
 cask "rectangle"       # Essential window manager (snapping)
 cask "orbstack"        # Fast, light Docker Desktop replacement
-cask "visual-studio-code"
 cask "ollama"          # Local LLM runner
