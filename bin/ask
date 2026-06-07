@@ -5,18 +5,57 @@ import urllib.request
 import subprocess
 import re
 import select
+import sqlite3
+import os
 
 MODEL = "gemma4:latest"
 OLLAMA_API = "http://localhost:11434/api/chat"
 MAX_ITERATIONS = 7
 MAX_OUTPUT_LEN = 4000
+DB_PATH = os.path.expanduser("~/.ask_history.db")
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS messages
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  role TEXT,
+                  content TEXT,
+                  tool_calls TEXT)''')
+    conn.commit()
+    return conn
+
+def load_history(conn, limit=10):
+    c = conn.cursor()
+    c.execute('SELECT role, content, tool_calls FROM messages ORDER BY id DESC LIMIT ?', (limit,))
+    rows = c.fetchall()
+    messages = []
+    for role, content, tool_calls_json in reversed(rows):
+        msg = {"role": role, "content": content}
+        if tool_calls_json:
+            msg["tool_calls"] = json.loads(tool_calls_json)
+        messages.append(msg)
+    return messages
+
+def save_message(conn, msg):
+    c = conn.cursor()
+    tool_calls_json = json.dumps(msg["tool_calls"]) if msg.get("tool_calls") else None
+    c.execute('INSERT INTO messages (role, content, tool_calls) VALUES (?, ?, ?)',
+              (msg["role"], msg.get("content", ""), tool_calls_json))
+    conn.commit()
+
+def clear_history(conn):
+    c = conn.cursor()
+    c.execute('DELETE FROM messages')
+    conn.commit()
 
 def strip_ansi(text):
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     return ansi_escape.sub('', text)
 
 def chat_stream(messages, tools=None):
-    data = {"model": MODEL, "messages": messages, "stream": True}
+    # Enforce deterministic behavior with temperature 0.0
+    data = {"model": MODEL, "messages": messages, "stream": True, "options": {"temperature": 0.0}}
     if tools:
         data["tools"] = tools
         
@@ -44,11 +83,10 @@ def chat_stream(messages, tools=None):
                     full_content += content_delta
                 
                 if "tool_calls" in msg:
-                    # Ollama sends the entire tool_calls array at once
                     tool_calls = msg["tool_calls"]
                     
             if full_content:
-                print() # newline after streaming content
+                print()
                 
     except Exception as e:
         print(f"\033[1;31m[Error] Failed to connect to Ollama: {e}\033[0m")
@@ -57,9 +95,17 @@ def chat_stream(messages, tools=None):
     return {"role": "assistant", "content": full_content, "tool_calls": tool_calls} if tool_calls else {"role": "assistant", "content": full_content}
 
 def main():
-    prompt = " ".join(sys.argv[1:])
+    conn = init_db()
+    
+    # Handle flags
+    args = sys.argv[1:]
+    if "--clear" in args:
+        clear_history(conn)
+        print("\033[1;32m[Success] Memory cleared.\033[0m")
+        return
+
+    prompt = " ".join(args)
     if not sys.stdin.isatty():
-        # Check if data is actually waiting to be read on stdin without blocking
         r, _, _ = select.select([sys.stdin], [], [], 0.0)
         if r:
             piped_data = sys.stdin.read().strip()
@@ -68,6 +114,7 @@ def main():
 
     if not prompt.strip():
         print("Usage: ask <prompt>")
+        print("       ask --clear  (clears conversation memory)")
         return
 
     tools = [{
@@ -85,10 +132,15 @@ def main():
         }
     }]
 
+    # Reconstruct sliding window context
     messages = [
-        {"role": "system", "content": "You are a helpful CLI assistant. You can use the run_command tool to execute shell commands. Always be concise."},
-        {"role": "user", "content": prompt}
+        {"role": "system", "content": "You are a helpful CLI assistant. You can use the run_command tool to execute shell commands. Always be concise."}
     ]
+    messages.extend(load_history(conn))
+    
+    user_msg = {"role": "user", "content": prompt}
+    messages.append(user_msg)
+    save_message(conn, user_msg)
 
     iterations = 0
     while iterations < MAX_ITERATIONS:
@@ -96,6 +148,7 @@ def main():
         
         message = chat_stream(messages, tools)
         messages.append(message)
+        save_message(conn, message)
 
         if message.get("tool_calls"):
             for tool_call in message["tool_calls"]:
@@ -118,7 +171,6 @@ def main():
                                 if not output.strip():
                                     output = "<Command completed with no output>"
                                     
-                                # Truncate output to prevent context window exhaustion
                                 if len(output) > MAX_OUTPUT_LEN:
                                     half = MAX_OUTPUT_LEN // 2
                                     output = output[:half] + f"\n\n...[TRUNCATED {len(output) - MAX_OUTPUT_LEN} CHARS]...\n\n" + output[-half:]
@@ -129,10 +181,9 @@ def main():
                             print("\033[1;31mDenied.\033[0m")
                             output = "User denied permission to execute the command."
                     
-                    messages.append({
-                        "role": "tool",
-                        "content": output
-                    })
+                    tool_msg = {"role": "tool", "content": output}
+                    messages.append(tool_msg)
+                    save_message(conn, tool_msg)
         else:
             break
             
