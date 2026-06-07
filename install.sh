@@ -94,13 +94,13 @@ for mapping in "${CONFIG_FILES[@]}"; do
 done
 
 # 6. Setup Neovim (LazyVim)
-if [ ! -d "$HOME/.config/nvim" ]; then
-    echo "Installing LazyVim starter..."
-    git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
-    rm -rf "$HOME/.config/nvim/.git"
-else
-    echo "Neovim config already exists."
+echo "Symlinking Neovim config..."
+if [ -e "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
+    BACKUP_FILE="$HOME/.config/nvim.bak.$(date +%s)"
+    echo "Warning: $HOME/.config/nvim exists. Backing up to $BACKUP_FILE..."
+    mv "$HOME/.config/nvim" "$BACKUP_FILE"
 fi
+ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
 # 7. Setup Tmux Plugin Manager
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
