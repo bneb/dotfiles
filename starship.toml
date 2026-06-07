@@ -37,7 +37,7 @@ style = "bold bright-purple"
 format = "[$symbol$branch]($style) "
 
 [git_status]
-format = '([$all_status$ahead_behind] )'
+format = '($all_status$ahead_behind)'
 conflicted = "[=${count}](bold red) "
 ahead = "[⇡${count}](bold blue) "
 behind = "[⇣${count}](bold blue) "
