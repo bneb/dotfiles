@@ -15,10 +15,6 @@ $directory\
 $git_branch\
 $git_status\
 $git_state\
-$nodejs\
-$python\
-$rust\
-$golang\
 $cmd_duration\
 $line_break\
 [╰─](bold bright-black) \
