@@ -9,6 +9,9 @@
 # 1. Deduplicate PATH entries automatically
 typeset -U path PATH
 
+# Export custom bin directory for custom executable scripts (like `ask`)
+export PATH="$HOME/dotfiles/bin:$PATH"
+
 # 2. Load shared profile environment variables and PATH
 if [ -f ~/.profile ]; then
     source ~/.profile
