@@ -6,10 +6,6 @@
 #              required to provision the developer environment.
 # ==============================================================================
 
-# Taps
-tap "homebrew/core"
-tap "homebrew/cask"
-
 # Core CLI Tools
 brew "eza"             # Modern ls
 brew "bat"             # Modern cat
