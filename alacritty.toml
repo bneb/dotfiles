@@ -1,0 +1,27 @@
+# ==============================================================================
+# FILE: alacritty.toml
+# DESCRIPTION: Core configuration for the Alacritty GPU-accelerated terminal.
+#              Defines window padding, opacity (glassmorphism), the JetBrains
+#              Mono Nerd Font family, and imports the Catppuccin Mocha theme.
+# ==============================================================================
+import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[window]
+padding = { x = 24, y = 24 }
+decorations = "Transparent"
+dynamic_padding = true
+opacity = 0.95
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+size = 14.0
+
+[scrolling]
+history = 0 # Rely on Tmux for scrollback
+
+[cursor]
+style = "Block"

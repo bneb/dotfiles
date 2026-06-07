@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# ==============================================================================
+# FILE: setup-llm
+# DESCRIPTION: Provisions a local, private Artificial Intelligence infrastructure.
+#              Ensures the Ollama daemon is running, pulls the Gemma 4 LLM
+#              weights (9B, 12B Multimodal, 26B), and installs the Aider AI
+#              pair programmer via the uv package manager.
+# ==============================================================================
+
+set -e
+
+echo "Setting up local LLM infrastructure (Ollama)..."
+
+# Check if Ollama is installed
+if ! command -v ollama &> /dev/null; then
+    echo "Error: Ollama is not installed."
+    exit 1
+fi
+
+# Ensure Ollama server is running in the background
+echo "Ensuring Ollama service is running..."
+if ! curl -s http://localhost:11434/api/tags >/dev/null; then
+    echo "Starting Ollama server..."
+    # The macOS app runs it automatically, but CLI needs starting if not
+    open -a Ollama || ollama serve &
+    sleep 5
+fi
+
+# Pull the Gemma 4 models
+echo "Pulling gemma4 (9B)..."
+ollama pull gemma4
+
+echo "Pulling gemma4:12b (12B Multimodal)..."
+ollama pull gemma4:12b
+
+echo "Pulling gemma4:26b (26B)..."
+ollama pull gemma4:26b
+
+# Install Aider
+if command -v uv &> /dev/null; then
+    echo "Installing Aider via uv..."
+    uv tool install aider-chat
+else
+    echo "Warning: 'uv' not found. Skipping Aider installation."
+fi
+
+echo "Setup complete."

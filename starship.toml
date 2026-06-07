@@ -1,0 +1,70 @@
+# ~/.config/starship.toml
+# ==============================================================================
+# FILE: starship.toml
+# DESCRIPTION: Cross-shell prompt configuration.
+#              Defines a highly condensed, high-density prompt with Nerd Font
+#              vector icons, Git status indicators, and execution time metrics.
+#              Optimized for instant load times and visual ergonomics.
+# ==============================================================================
+
+# Wait 10 milliseconds for starship to check files under the current directory.
+
+format = """
+[╭─](bold bright-black) \
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+$nodejs\
+$python\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+[╰─](bold bright-black) \
+$character"""
+
+[directory]
+style = "bold cyan"
+read_only = " 󰌾"
+truncation_length = 3
+truncate_to_repo = true
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+[character]
+success_symbol = "[❯](bold bright-magenta)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❮](bold yellow)"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "bold red"
+format = '([$all_status$ahead_behind]($style) )'
+
+[nodejs]
+symbol = "󰎙 "
+style = "bold bright-green"
+format = "[$symbol($version)]($style) "
+
+[python]
+symbol = " "
+style = "bold bright-yellow"
+format = "[$symbol($version)]($style) "
+
+[rust]
+symbol = " "
+style = "bold bright-red"
+format = "[$symbol($version)]($style) "
+
+[golang]
+symbol = " "
+style = "bold bright-cyan"
+format = "[$symbol($version)]($style) "
+
+[cmd_duration]
+min_time = 500
+format = " 󱦟 [$duration](bold bright-yellow)"

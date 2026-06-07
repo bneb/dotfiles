@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# ==============================================================================
+# FILE: setup-ssh
+# DESCRIPTION: Automates the generation and configuration of GitHub SSH keys.
+#              Generates an ed25519 key pair, configures the ssh-agent, applies
+#              strict permission locking (700/600), injects macOS Keychain
+#              integration into ~/.ssh/config, and copies the public key.
+# ==============================================================================
+
+set -e
+
+echo "Setting up SSH keys for GitHub..."
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+if [ -f "$HOME/.ssh/id_ed25519" ]; then
+    echo "SSH key already exists at ~/.ssh/id_ed25519"
+else
+    echo "Enter your email address for the GitHub SSH Key:"
+    read -r email
+    
+    echo "Generating new ed25519 SSH key..."
+    ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/id_ed25519" -N ""
+    
+    # Start the ssh-agent in the background
+    eval "$(ssh-agent -s)"
+    
+    # macOS specific SSH config to auto-load keys and use keychain
+    if [ ! -f "$HOME/.ssh/config" ]; then
+        echo "Creating ~/.ssh/config for macOS Keychain integration..."
+        cat > "$HOME/.ssh/config" << 'EOF'
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+EOF
+    else
+        if ! grep -q "UseKeychain yes" "$HOME/.ssh/config"; then
+            echo "Appending macOS Keychain integration to existing ~/.ssh/config..."
+            cat >> "$HOME/.ssh/config" << 'EOF'
+
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+EOF
+        fi
+    fi
+    chmod 600 "$HOME/.ssh/config"
+    
+    # Add key to ssh-agent and store in keychain
+    ssh-add --apple-use-keychain "$HOME/.ssh/id_ed25519"
+fi
+
+# Copy the public key to clipboard
+if command -v pbcopy >/dev/null 2>&1; then
+    pbcopy < "$HOME/.ssh/id_ed25519.pub"
+    echo "Public key copied to clipboard."
+else
+    echo "Warning: pbcopy not found. Public key:"
+    cat "$HOME/.ssh/id_ed25519.pub"
+fi
