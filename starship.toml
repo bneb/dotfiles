@@ -36,8 +36,17 @@ style = "bold bright-purple"
 format = "[$symbol$branch]($style) "
 
 [git_status]
-style = "bold bright-red"
-format = '([$all_status$ahead_behind]($style) )'
+format = '([$all_status$ahead_behind] )'
+conflicted = "[=${count}](bold red) "
+ahead = "[⇡${count}](bold blue) "
+behind = "[⇣${count}](bold blue) "
+diverged = "[⇕⇡${ahead_count}⇣${behind_count}](bold purple) "
+untracked = "[?${count}](bold bright-black) "
+stashed = "[$${count}](bold bright-black) "
+modified = "[~${count}](bold yellow) "
+staged = "[+${count}](bold green) "
+renamed = "[»${count}](bold cyan) "
+deleted = "[-${count}](bold red) "
 
 [nodejs]
 symbol = "󰎙 "
