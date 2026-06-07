@@ -40,7 +40,7 @@ ollama pull gemma4:26b
 # Install Aider
 if command -v uv &> /dev/null; then
     echo "Installing Aider via uv..."
-    uv tool install aider-chat
+    uv tool install --python 3.12 aider-chat
 else
     echo "Warning: 'uv' not found. Skipping Aider installation."
 fi
