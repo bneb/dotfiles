@@ -4,6 +4,7 @@
 #              Defines window padding, opacity (glassmorphism), the JetBrains
 #              Mono Nerd Font family, and imports the Catppuccin Mocha theme.
 # ==============================================================================
+[general]
 import = [
   "~/.config/alacritty/catppuccin-mocha.toml"
 ]
