@@ -27,6 +27,10 @@ async def cli_approval_handler(tool_call):
         return False
 
 async def main():
+    # Bypass Antigravity's API key validation since we are using a local Ollama model
+    import os
+    os.environ.setdefault("GEMINI_API_KEY", "local_ollama_bypass")
+    
     prompt = " ".join(sys.argv[1:])
     
     # Read from stdin if piped
