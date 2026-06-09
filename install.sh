@@ -43,6 +43,20 @@ brew bundle --file="$DOTFILES_DIR/Brewfile" || echo "Warning: Some Brew packages
 echo "Setting Google Chrome as default browser..."
 defaultbrowser chrome || true
 
+if command -v duti &> /dev/null; then
+    echo "Setting Google Chrome as the default handler for emails and documents..."
+    # Neutralize Apple Mail by routing email links to Chrome
+    duti -s com.google.Chrome mailto || true
+    # Neutralize FaceTime and iMessage by routing call/text links to Chrome
+    duti -s com.google.Chrome sms || true
+    duti -s com.google.Chrome tel || true
+    duti -s com.google.Chrome callto || true
+    # Ensure Chrome handles web files instead of Safari
+    duti -s com.google.Chrome public.html all || true
+    duti -s com.google.Chrome public.xhtml all || true
+    duti -s com.google.Chrome public.svg-image all || true
+fi
+
 # 3. Create necessary directories
 echo "Creating ~/.config directories..."
 mkdir -p "$HOME/.config/alacritty"

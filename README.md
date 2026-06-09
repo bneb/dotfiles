@@ -46,7 +46,7 @@ Terminal multiplexing. Prefix is mapped to `Ctrl+a`.
 
 ## Architecture
 
-*   **`install.sh`**: Deployment script. Installs Homebrew, evaluates `Brewfile`, and symlinks configs.
+*   **`install.sh`**: Deployment script. Installs Homebrew, evaluates `Brewfile`, symlinks configs, and sets default apps.
 *   **`bin/setup-ssh`**: GitHub SSH key generation.
 *   **`bin/setup-llm`**: Ollama and Gemma provisioning.
 *   **`.macos`**: macOS default configurations.

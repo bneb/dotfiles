@@ -26,6 +26,7 @@ brew "neovim"          # Editor
 brew "starship"        # Prompt
 brew "tmux"            # Multiplexer
 brew "defaultbrowser"  # Tool to set default browser
+brew "duti"            # Tool to set default apps for documents
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 

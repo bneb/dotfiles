@@ -202,4 +202,82 @@ defaults write com.apple.ActivityMonitor ShowCategory -int 0
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
+###############################################################################
+# Power User Ergonomics & UI                                                  #
+###############################################################################
+
+echo "➡️  Configuring Power User Ergonomics..."
+# Full Keyboard Access in dialogs
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+# Disable Window Animations for a snappier OS
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+
+# Allow quitting Finder via ⌘ + Q (hides desktop icons)
+defaults write com.apple.finder QuitMenuItem -bool true
+
+# Enable spring loading for directories
+defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+defaults write NSGlobalDomain com.apple.springing.delay -float 0
+
+###############################################################################
+# Software Updates & App Store                                                #
+###############################################################################
+
+echo "➡️  Configuring Software Updates..."
+# Background update downloads
+defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+
+# Auto-install security updates
+defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+
+# Auto-update App Store apps
+defaults write com.apple.commerce AutoUpdate -bool true
+
+###############################################################################
+# TextEdit & Plain Text Workflows                                             #
+###############################################################################
+
+echo "➡️  Configuring TextEdit..."
+# Force Plain Text mode and UTF-8
+defaults write com.apple.TextEdit RichText -int 0
+defaults write com.apple.TextEdit PlainTextEncoding -int 4
+defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+###############################################################################
+# Disable Apple Bloatware (Siri, Music)                                       #
+###############################################################################
+
+echo "➡️  Disabling Apple Bloatware (Siri & Music)..."
+# Disable Siri completely
+defaults write com.apple.assistant.support "Assistant Enabled" -bool false
+defaults write com.apple.Siri StatusMenuVisible -bool false
+
+# Stop iTunes/Music from responding to the keyboard media keys
+launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
+
+###############################################################################
+# Security & Privacy                                                          #
+###############################################################################
+
+echo "➡️  Configuring Security & Privacy..."
+# Require password immediately after sleep or screen saver begins
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# Turn on the macOS application firewall
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+
+# Ensure Gatekeeper is strictly enabled
+sudo spctl --master-enable
+
+# Disable remote login (SSH) by default
+sudo systemsetup -setremotelogin off
+
+# Disable the guest account
+sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool NO
+
+# Disable automatic login
+sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser ""
+
 echo "🎉 Done. Note that some of these changes require a logout/restart to take effect."
